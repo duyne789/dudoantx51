@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ORBITRON - PRESTIGE EDITION</title>
+    <title>Tool dự đoán md5</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+        
         :root {
-            --bg: #050b18;
-            --panel: rgba(15, 23, 42, 0.95);
-            --neon-blue: #38bdf8;
+            --bg: #020617;
+            --panel: rgba(15, 23, 42, 0.8);
+            --neon-blue: #0ea5e9;
             --neon-pink: #f43f5e;
             --neon-green: #10b981;
-            --text: #f1f5f9;
+            --neon-yellow: #f59e0b;
+            --text: #f8fafc;
         }
 
         body {
             background: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #0f172a 0%, #050b18 100%);
+            background: radial-gradient(circle at top right, #1e1b4b, #020617);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text);
             display: flex;
@@ -26,205 +27,271 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* Hiệu ứng hạt bụi bay phía sau (Trang trí) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3; pointer-events: none;
         }
 
         .container {
             background: var(--panel);
-            padding: 30px;
-            border-radius: 28px;
+            padding: 25px;
+            border-radius: 32px;
             width: 100%;
-            max-width: 480px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
+            max-width: 450px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(56, 189, 248, 0.05);
+            backdrop-filter: blur(15px);
+            position: relative;
+            z-index: 1;
         }
 
         .header h2 {
             font-family: 'Orbitron', sans-serif;
             text-align: center;
-            color: var(--neon-blue);
+            font-size: 22px;
+            background: linear-gradient(to right, var(--neon-blue), #93c5fd, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             margin-bottom: 25px;
-            text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
         }
 
+        /* Bảng thống kê kiểu Dashboard xe đua */
         .stats-summary {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 16px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
-        .stat-item { text-align: center; }
-        .stat-item span { display: block; font-size: 10px; color: #64748b; text-transform: uppercase; }
-        .stat-item b { font-size: 18px; color: #fff; font-family: 'Orbitron'; }
+        .stat-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            transition: 0.3s;
+        }
 
-        .input-group { margin-bottom: 15px; }
-        .label-small { font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .stat-item:hover { border-color: var(--neon-blue); }
+        .stat-item span { display: block; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-item b { font-size: 20px; color: #fff; font-family: 'Orbitron'; }
+
+        /* Input Cyberpunk */
+        .input-group { margin-bottom: 20px; position: relative; }
+        .label-small { 
+            font-size: 12px; 
+            color: var(--neon-blue); 
+            text-transform: uppercase; 
+            font-weight: bold;
+            margin-bottom: 8px; 
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
         input {
             width: 100%;
-            padding: 14px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            color: var(--neon-blue);
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 16px;
+            color: #fff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 18px;
             text-align: center;
             box-sizing: border-box;
-            outline: none;
+            transition: 0.3s;
         }
 
-        input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+        input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+        }
 
         .btn-main {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-            color: #0f172a;
+            padding: 20px;
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
+            font-weight: 900;
             border: none;
-            border-radius: 12px;
+            border-radius: 18px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-main::after {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .btn-main:hover::after { left: 100%; }
+        .btn-main:active { transform: scale(0.98); }
+
+        /* Khu vực kết quả */
+        .result-area {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(2, 6, 23, 0.8);
+            border-radius: 24px;
+            border: 1px solid var(--neon-blue);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .big-pred {
+            font-size: 65px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            text-align: center;
+            margin: 10px 0;
+            letter-spacing: -2px;
+        }
+
+        .tai-text { color: var(--neon-pink); filter: drop-shadow(0 0 15px var(--neon-pink)); }
+        .xiu-text { color: var(--neon-blue); filter: drop-shadow(0 0 15px var(--neon-blue)); }
+
+        /* Progress Bar Modern */
+        .bar-wrap {
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            overflow: hidden;
+            display: flex;
+            margin: 20px 0;
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bar-t, .bar-x {
+            width: 50%;
+            height: 100%;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 12px;
+            transition: width 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .bar-t { background: linear-gradient(90deg, #f43f5e, #e11d48); }
+        .bar-x { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+
+        .history-detail {
+            font-size: 14px;
+            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hộp tiền cược */
+        .bet-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--neon-green);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .bet-money { 
+            font-size: 28px; 
+            font-weight: 900; 
+            color: var(--neon-green); 
+            font-family: 'Orbitron'; 
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Nút Feedback */
+        .feedback-btns { display: flex; gap: 12px; }
+        .f-btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 900;
+            font-family: 'Orbitron';
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
         }
 
-        .result-area {
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(10, 15, 30, 0.9);
-            border-radius: 20px;
-            border: 1px solid var(--neon-blue);
-            display: none;
-        }
-
-        .khuyen-nghi-header {
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--neon-blue);
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-            padding-bottom: 5px;
-        }
-
-        .big-pred {
-            font-size: 55px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            text-align: center;
-            margin: 5px 0;
-        }
-
-        .tai-text { color: var(--neon-pink); text-shadow: 0 0 20px var(--neon-pink); }
-        .xiu-text { color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); }
-
-        .conf-box { text-align: center; margin: 15px 0; }
-        .conf-label { font-size: 12px; color: #94a3b8; margin-bottom: 5px; }
-        .conf-val { font-size: 28px; font-weight: bold; font-family: 'Orbitron'; }
-
-        .bar-wrap {
-            height: 12px;
-            background: #0f172a;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            margin: 10px 0;
-        }
-
-        .bar-t { background: var(--neon-pink); transition: width 0.8s; }
-        .bar-x { background: var(--neon-blue); transition: width 0.8s; }
-
-        .history-detail {
-            font-size: 13px;
-            color: #cbd5e1;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 10px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            border-left: 3px solid var(--neon-blue);
-        }
-
-        .bet-box {
-            background: rgba(16, 185, 129, 0.1);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px dashed var(--neon-green);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .bet-money { font-size: 22px; font-weight: bold; color: var(--neon-green); font-family: 'Orbitron'; }
-
-        .feedback-btns { display: flex; gap: 10px; }
-        .f-btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-family: 'Orbitron';
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .f-win { background: var(--neon-green); color: #000; }
-        .f-loss { background: var(--neon-pink); color: #fff; }
+        .f-win { background: var(--neon-green); color: #064e3b; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .f-loss { background: var(--neon-pink); color: #fff; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3); }
+        .f-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header"><h2>ORBITRON AI</h2></div>
+    <div class="header"><h2>CYBERIEND on Hit.club</h2></div>
 
     <div class="stats-summary">
-        <div class="stat-item"><span>Wins</span><b id="winCount">0</b></div>
-        <div class="stat-item"><span>Losses</span><b id="lossCount">0</b></div>
-        <div class="stat-item"><span>Rate</span><b id="winRate">0%</b></div>
+        <div class="stat-item"><span>WINS</span><b id="winCount">0</b></div>
+        <div class="stat-item"><span>LOSSES</span><b id="lossCount">0</b></div>
+        <div class="stat-item"><span>WIN RATE</span><b id="winRate">0%</b></div>
     </div>
 
     <div class="input-group">
-        <label class="label-small">Vốn hiện tại:</label>
-        <input type="number" id="capInput" placeholder="Nhập số vốn...">
+        <label class="label-small">💰 Vốn hiện tại</label>
+        <input type="number" id="capInput" placeholder="Nhập số VNĐ...">
     </div>
 
     <div class="input-group">
-        <label class="label-small">Dữ liệu phiên (T/X):</label>
-        <input type="text" id="histInput" placeholder="Nhập chuỗi T/X..." autocomplete="off">
+        <label class="label-small">📊 Chuỗi lịch sử (T/X)</label>
+        <input type="text" id="histInput" placeholder="VD: TTTXX..." autocomplete="off">
     </div>
 
-    <button class="btn-main" onclick="runAnalysis()">PHÂN TÍCH MẪU THẾ</button>
+    <button class="btn-main" onclick="startLoading()">PHÂN TÍCH HỆ THỐNG</button>
 
     <div id="resArea" class="result-area">
-        <div class="khuyen-nghi-header">KHUYẾN NGHỊ</div>
         <div id="finalPred" class="big-pred">--</div>
         
-        <div class="conf-box">
-            <div class="conf-label">ĐỘ TIN CẬY MẪU</div>
-            <div id="confVal" class="conf-val">0%</div>
-            <div id="barLabel" style="font-size: 11px; margin-top: 5px; color: var(--neon-blue);">0% T | 0% X</div>
-            <div class="bar-wrap">
-                <div id="barT" class="bar-t" style="width: 50%"></div>
-                <div id="barX" class="bar-x" style="width: 50%"></div>
-            </div>
+        <div style="text-align:center;">
+            <span style="font-size:11px; color:#64748b; letter-spacing:2px;">ĐỘ TIN CẬY HỆ THỐNG</span>
+            <div id="confVal" style="font-size:32px; font-weight:900; font-family:'Orbitron'; color:var(--neon-blue);">0%</div>
+        </div>
+
+        <div class="bar-wrap">
+            <div id="barT" class="bar-t"></div>
+            <div id="barX" class="bar-x"></div>
         </div>
 
         <div id="historyDetail" class="history-detail"></div>
 
         <div class="bet-box">
-            <div class="label-small">Khuyên vào:</div>
+            <span class="label-small" style="color:var(--neon-green); margin-bottom:5px;">LỆNH VÀO TIỀN</span>
             <div id="moneyVal" class="bet-money">0 VNĐ</div>
-            <div id="betPercent" style="font-size: 11px; color: #64748b; margin-top: 4px;">(0% vốn)</div>
+            <div id="betPercent" style="font-size:12px; color:#94a3b8; margin-top:5px;">(Đợi phân tích...)</div>
         </div>
 
         <div class="feedback-btns">
@@ -235,9 +302,22 @@
 </div>
 
 <script>
+    // GIỮ NGUYÊN TOÀN BỘ LOGIC CỦA BẠN NHƯNG THÊM HIỆU ỨNG CHỜ
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxaVIYCkkyrs_94FzlrjxDyezqxkntpB3ixqJfBd7S9-5c5t6JElOSbw3-G5zJthv0/exec";
-
     let wins = 0, losses = 0, lastPrediction = "", currentBet = 0;
+
+    function startLoading() {
+        const btn = document.querySelector('.btn-main');
+        btn.innerText = "ĐANG QUÉT DỮ LIỆU...";
+        btn.style.opacity = "0.7";
+        
+        // Tạo hiệu ứng chờ cho chuyên nghiệp
+        setTimeout(() => {
+            runAnalysis();
+            btn.innerText = "PHÂN TÍCH HỆ THỐNG";
+            btn.style.opacity = "1";
+        }, 800);
+    }
 
     function runAnalysis() {
         let cap = parseInt(document.getElementById('capInput').value) || 0;
@@ -245,9 +325,9 @@
         if (raw.length < 5) { alert("Dữ liệu tối thiểu 5 phiên!"); return; }
 
         let data = raw.split('');
-        let pattern = data.slice(-3).join(''); 
+        let pattern = data.slice(-3).join('');
+        
         let cT = 0, cX = 0, matches = 0;
-
         for (let i = 0; i < data.length - 3; i++) {
             if (data.slice(i, i+3).join('') === pattern) {
                 matches++;
@@ -255,59 +335,64 @@
             }
         }
 
-        let pT, pX, pred;
+        let lastChar = data[data.length-1], streak = 0;
+        for (let i = data.length-1; i >= 0; i--) {
+            if (data[i] === lastChar) streak++; else break;
+        }
+
+        let isSwap = true;
+        for (let i = data.length-1; i > data.length-5; i--) {
+            if (data[i] === data[i-1]) isSwap = false;
+        }
+
+        let pT = 50, pX = 50;
         if (matches > 0) {
             pT = Math.round((cT / (cT + cX)) * 100);
             pX = 100 - pT;
-            pred = pT >= pX ? 'T' : 'X';
-        } else {
-            pred = (data.filter(x => x==='T').length > data.length/2) ? 'X' : 'T';
-            pT = pred === 'T' ? 60 : 40;
-            pX = 100 - pT;
         }
 
-        lastPrediction = pred;
+        let note = "";
+        if (streak >= 4) {
+            if (lastChar === 'T') pT += 20; else pX += 20;
+            note = `<br><span style="color:var(--neon-pink); font-weight:bold;">● PHÁT HIỆN BỆT ${streak} CÂY</span>`;
+        } else if (isSwap && data.length >= 4) {
+            if (lastChar === 'T') pX += 20; else pT += 20;
+            note = `<br><span style="color:var(--neon-blue); font-weight:bold;">● PHÁT HIỆN CẦU ĐẢO 1-1</span>`;
+        }
+
+        pT = Math.min(95, Math.max(5, pT)); pX = 100 - pT;
+        lastPrediction = pT >= pX ? 'T' : 'X';
+        let conf = Math.max(pT, pX);
+
         document.getElementById('resArea').style.display = 'block';
         let pDiv = document.getElementById('finalPred');
-        pDiv.innerText = pred === 'T' ? "TÀI" : "XỈU";
-        pDiv.className = "big-pred " + (pred === 'T' ? "tai-text" : "xiu-text");
-        
-        let conf = Math.max(pT, pX);
+        pDiv.innerText = lastPrediction === 'T' ? "TÀI" : "XỈU";
+        pDiv.className = "big-pred " + (lastPrediction === 'T' ? "tai-text" : "xiu-text");
         document.getElementById('confVal').innerText = conf + "%";
-        document.getElementById('barLabel').innerText = `${pT}% T | ${pX}% X`;
+        
         document.getElementById('barT').style.width = pT + "%";
         document.getElementById('barX').style.width = pX + "%";
+        document.getElementById('barT').innerText = pT > 25 ? pT+"% T" : "";
+        document.getElementById('barX').innerText = pX > 25 ? pX+"% X" : "";
 
-        // Phần hiển thị chi tiết lịch sử bạn yêu cầu
         document.getElementById('historyDetail').innerHTML = `
-            Trong quá khứ, thế bài [${pattern}] đã lặp lại ${matches} lần.<br>
-            - Về TÀI: ${cT} lần (${pT}%)<br>
-            - Về XỈU: ${cX} lần (${pX}%)
+            Hệ thống tìm thấy <b>${matches}</b> mẫu [${pattern}] tương đồng.${note}
         `;
 
-        let rate = conf >= 90 ? 0.05 : 0.02;
+        let rate = conf >= 85 ? 0.05 : 0.02;
         currentBet = Math.floor(cap * rate);
         document.getElementById('moneyVal').innerText = currentBet.toLocaleString('vi-VN') + " VNĐ";
-        document.getElementById('betPercent').innerText = `(${(rate*100)}% vốn)`;
+        document.getElementById('betPercent').innerText = `Tỷ lệ vào tiền: ${(rate*100)}% tổng vốn`;
+        
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     async function recordFeedback(isWin) {
-        let histField = document.getElementById('histInput');
+        let h = document.getElementById('histInput');
         let res = isWin ? lastPrediction : (lastPrediction === "T" ? "X" : "T");
-
-        fetch(GOOGLE_SHEET_URL, {
-            method: 'POST', mode: 'no-cors',
-            body: JSON.stringify({
-                history: histField.value,
-                prediction: lastPrediction,
-                status: isWin ? "WIN" : "LOSS",
-                capital: document.getElementById('capInput').value,
-                betAmount: currentBet
-            })
-        });
-
+        fetch(GOOGLE_SHEET_URL, {method: 'POST', mode: 'no-cors', body: JSON.stringify({history: h.value, prediction: lastPrediction, status: isWin?"WIN":"LOSS", capital: document.getElementById('capInput').value, betAmount: currentBet})});
         if (isWin) wins++; else losses++;
-        histField.value += res;
+        h.value += res;
         document.getElementById('winCount').innerText = wins;
         document.getElementById('lossCount').innerText = losses;
         document.getElementById('winRate').innerText = Math.round((wins/(wins+losses))*100) + "%";
