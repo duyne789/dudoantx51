@@ -137,6 +137,7 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
+            margin-bottom: 15px; /* Thêm khoảng cách cho nút bên dưới */
         }
 
         .btn-main::after {
@@ -151,6 +152,31 @@
         .btn-main:hover::after { left: 100%; }
         .btn-main:active { transform: scale(0.98); }
 
+        /* STYLE NÚT VÀO SÀN MỚI */
+        .btn-san {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            color: var(--neon-yellow);
+            border: 2px solid var(--neon-yellow);
+            border-radius: 18px;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .btn-san:hover {
+            background: var(--neon-yellow);
+            color: #000;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
         /* Khu vực kết quả */
         .result-area {
             margin-top: 30px;
@@ -159,6 +185,7 @@
             border-radius: 24px;
             border: 1px solid var(--neon-blue);
             animation: slideUp 0.5s ease-out;
+            display: none; /* Ẩn mặc định như code cũ */
         }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -272,6 +299,8 @@
     </div>
 
     <button class="btn-main" onclick="startLoading()">PHÂN TÍCH HỆ THỐNG</button>
+    
+    <a href="https://hit.club" target="_blank" class="btn-san">VÀO SÀN NGAY</a>
 
     <div id="resArea" class="result-area">
         <div id="finalPred" class="big-pred">--</div>
