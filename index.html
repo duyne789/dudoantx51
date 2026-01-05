@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tool dự đoán md5 - Big Data Edition</title>
+    <title>Tool dự đoán md5 - Big Data Deep Scan</title>
     <style>
-        /* GIỮ NGUYÊN TOÀN BỘ PHẦN STYLE CỦA BẠN (Mình không thay đổi giao diện đẹp của bạn) */
+        /* GIỮ NGUYÊN TOÀN BỘ PHẦN STYLE CỦA BẠN */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
         :root { --bg: #020617; --panel: rgba(15, 23, 42, 0.8); --neon-blue: #0ea5e9; --neon-pink: #f43f5e; --neon-green: #10b981; --neon-yellow: #f59e0b; --text: #f8fafc; }
         body { background: var(--bg); background: radial-gradient(circle at top right, #1e1b4b, #020617); font-family: 'Rajdhani', sans-serif; color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; overflow-x: hidden; }
@@ -54,7 +54,7 @@
 
     <div class="input-group">
         <label class="label-small">💰 Vốn hiện tại</label>
-        <input type="number" id="capInput" placeholder="Nhập số VNĐ...">
+        <input type="number" id="capInput" placeholder="Nhập số VNĐ..." value="1000000">
     </div>
 
     <div class="input-group">
@@ -62,7 +62,7 @@
         <input type="text" id="histInput" placeholder="VD: TTTXX..." autocomplete="off">
     </div>
 
-    <button class="btn-main" id="btnMain" onclick="startLoading()">PHÂN TÍCH BIG DATA</button>
+    <button class="btn-main" id="btnMain" onclick="startLoading()">PHÂN TÍCH DEEP SCAN</button>
     <a href="http://hitclub.pro/" target="_blank" class="btn-san">VÀO SÀN NGAY</a>
 
     <div id="resArea" class="result-area">
@@ -89,75 +89,69 @@
 </div>
 
 <script>
-    // ⚠️ THAY LINK GOOGLE SCRIPT CỦA BẠN VÀO ĐÂY
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxaVIYCkkyrs_94FzlrjxDyezqxkntpB3ixqJfBd7S9-5c5t6JElOSbw3-G5zJthv0/exec";
     let wins = 0, losses = 0, lastPrediction = "", currentBet = 0;
 
     async function startLoading() {
         const btn = document.getElementById('btnMain');
-        btn.innerText = "ĐANG TẢI DỮ LIỆU TỪ SHEET...";
+        btn.innerText = "QUÉT DEEP SCAN (4 TẦNG)...";
         btn.disabled = true;
-        btn.style.opacity = "0.6";
 
         try {
-            // Bước 1: Gọi lệnh GET để lấy dữ liệu lịch sử từ Google Sheet
             const response = await fetch(GOOGLE_SHEET_URL);
             const sheetData = await response.json();
-            
-            // Bước 2: Bắt đầu phân tích
             runAnalysis(sheetData);
-            
         } catch (error) {
-            console.error("Lỗi lấy dữ liệu:", error);
-            alert("Không kết nối được với Google Sheet. Đang dùng dữ liệu cục bộ.");
-            runAnalysis([]); // Chạy tạm bằng dữ liệu nhập tay nếu lỗi mạng
+            console.error("Lỗi:", error);
+            runAnalysis([]);
         } finally {
-            btn.innerText = "PHÂN TÍCH HỆ THỐNG";
+            btn.innerText = "PHÂN TÍCH DEEP SCAN";
             btn.disabled = false;
-            btn.style.opacity = "1";
         }
     }
 
     function runAnalysis(sheetData) {
         let cap = parseInt(document.getElementById('capInput').value) || 0;
-        let rawCurrent = document.getElementById('histInput').value.toUpperCase().replace(/[^TX]/g, '');
-        if (rawCurrent.length < 3) { alert("Nhập ít nhất 3 phiên gần nhất!"); return; }
+        let raw = document.getElementById('histInput').value.toUpperCase().replace(/[^TX]/g, '');
+        if (raw.length < 3) { alert("Nhập ít nhất 3 phiên gần nhất!"); return; }
 
-        // Gom dữ liệu: Dữ liệu từ Sheet + Dữ liệu vừa nhập tay
-        let oldHistory = sheetData.map(row => row[1]).join(''); // Cột B trong Sheet
-        let fullData = oldHistory + rawCurrent;
-        let dataArray = fullData.split('');
+        let oldHistory = sheetData.map(row => row[1]).join('');
+        let fullData = (oldHistory + raw).split('');
         
-        let pattern = rawCurrent.slice(-3).join ? rawCurrent.slice(-3).join('') : rawCurrent.slice(-3);
-        let cT = 0, cX = 0, matches = 0;
+        let pT = 50, pX = 50, matches = 0, usedPattern = "";
 
-        // Soi mẫu trong toàn bộ kho dữ liệu Big Data
-        for (let i = 0; i < dataArray.length - 3; i++) {
-            if (dataArray.slice(i, i+3).join('') === pattern) {
-                matches++;
-                if (dataArray[i+3] === 'T') cT++; else cX++;
+        // --- THUẬT TOÁN DEEP SCAN 4 -> 3 -> 2 ---
+        for (let len = 4; len >= 2; len--) {
+            let pattern = raw.slice(-len);
+            let cT = 0, cX = 0;
+            
+            for (let i = 0; i < fullData.length - len; i++) {
+                if (fullData.slice(i, i + len).join('') === pattern) {
+                    if (fullData[i + len] === 'T') cT++;
+                    else if (fullData[i + len] === 'X') cX++;
+                }
+            }
+
+            if ((cT + cX) > 0) {
+                matches = cT + cX;
+                pT = Math.round((cT / matches) * 100);
+                pX = 100 - pT;
+                usedPattern = pattern;
+                break; // Tìm thấy mẫu sâu nhất là dừng
             }
         }
 
-        // Tính tỷ lệ %
-        let pT = 50, pX = 50;
-        if (matches > 0) {
-            pT = Math.round((cT / (cT + cX)) * 100);
-            pX = 100 - pT;
-        }
-
-        // Logic bổ trợ nhịp cầu hiện tại
-        let lastChar = rawCurrent[rawCurrent.length-1];
+        // Logic bổ trợ bệt gắt cho Hitclub
+        let lastChar = raw[raw.length-1];
         let streak = 0;
-        for (let i = rawCurrent.length-1; i >= 0; i--) {
-            if (rawCurrent[i] === lastChar) streak++; else break;
+        for (let i = raw.length-1; i >= 0; i--) {
+            if (raw[i] === lastChar) streak++; else break;
         }
-
         if (streak >= 4) {
             if (lastChar === 'T') pT += 15; else pX += 15;
         }
 
-        pT = Math.min(98, Math.max(2, pT)); 
+        pT = Math.min(96, Math.max(4, pT));
         pX = 100 - pT;
         lastPrediction = pT >= pX ? 'T' : 'X';
         let conf = Math.max(pT, pX);
@@ -171,15 +165,17 @@
         
         document.getElementById('barT').style.width = pT + "%";
         document.getElementById('barX').style.width = pX + "%";
-        document.getElementById('barT').innerText = pT > 20 ? pT+"% T" : "";
-        document.getElementById('barX').innerText = pX > 20 ? pX+"% X" : "";
-
+        
         document.getElementById('historyDetail').innerHTML = `
-            Hệ thống phát hiện <b>${matches}</b> lần mẫu [${pattern}] xuất hiện trong lịch sử.<br>
-            Kết quả quá khứ: <b>${cT} Tài - ${cX} Xỉu</b>.
+            Phát hiện <b>${matches}</b> lần mẫu <b>[${usedPattern}]</b> xuất hiện.<br>
+            Cầu đang đi theo nhịp <b>${usedPattern.length} tay</b> gần nhất.
         `;
 
-        let rate = conf >= 90 ? 0.1 : (conf >= 75 ? 0.05 : 0.02);
+        // Quản lý vốn Kelly tối ưu
+        let rate = 0.02; // Mặc định 2%
+        if (conf >= 90) rate = 0.1; 
+        else if (conf >= 80) rate = 0.05;
+
         currentBet = Math.floor(cap * rate);
         document.getElementById('moneyVal').innerText = currentBet.toLocaleString('vi-VN') + " VNĐ";
         document.getElementById('betPercent').innerText = `Gợi ý vào: ${(rate*100)}% vốn`;
@@ -191,7 +187,6 @@
         let h = document.getElementById('histInput');
         let res = isWin ? lastPrediction : (lastPrediction === "T" ? "X" : "T");
         
-        // Gửi dữ liệu lên Sheet để học cho lần sau
         fetch(GOOGLE_SHEET_URL, {
             method: 'POST', 
             mode: 'no-cors', 
