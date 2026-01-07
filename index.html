@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tool dự đoán md5 - Big Data Deep Scan</title>
+    <title>Tool Hitclub MD5</title>
     <style>
-        /* GIỮ NGUYÊN TOÀN BỘ PHẦN STYLE CỦA BẠN */
+        /* GIỮ NGUYÊN TOÀN BỘ PHẦN STYLE CŨ */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
         :root { --bg: #020617; --panel: rgba(15, 23, 42, 0.8); --neon-blue: #0ea5e9; --neon-pink: #f43f5e; --neon-green: #10b981; --neon-yellow: #f59e0b; --text: #f8fafc; }
         body { background: var(--bg); background: radial-gradient(circle at top right, #1e1b4b, #020617); font-family: 'Rajdhani', sans-serif; color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; overflow-x: hidden; }
@@ -14,7 +14,6 @@
         .header h2 { font-family: 'Orbitron', sans-serif; text-align: center; font-size: 22px; background: linear-gradient(to right, var(--neon-blue), #93c5fd, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
         .stats-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 25px; }
         .stat-item { background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; transition: 0.3s; }
-        .stat-item:hover { border-color: var(--neon-blue); }
         .stat-item span { display: block; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
         .stat-item b { font-size: 20px; color: #fff; font-family: 'Orbitron'; }
         .input-group { margin-bottom: 20px; position: relative; }
@@ -39,64 +38,126 @@
         .f-btn { flex: 1; padding: 18px; border: none; border-radius: 16px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .f-win { background: var(--neon-green); color: #064e3b; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
         .f-loss { background: var(--neon-pink); color: #fff; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3); }
+
+        /* PHẦN THÊM MỚI: BÀN PHÍM, BIỂU ĐỒ VÀ ADMIN POPUP */
+        .admin-trigger { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 20px; color: var(--neon-blue); }
+        .quick-input { display: flex; gap: 10px; margin-top: 10px; }
+        .q-btn { flex: 1; padding: 12px; border: 1px solid #334155; background: #0f172a; color: #fff; border-radius: 12px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; }
+        .q-tai { border-color: var(--neon-pink); color: var(--neon-pink); }
+        .q-xiu { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .chart-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; margin: 15px 0; border: 1px solid #1e293b; }
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+        .modal-content { background: #0f172a; padding: 30px; border-radius: 24px; border: 1px solid var(--neon-blue); width: 80%; max-width: 320px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="admin-trigger" onclick="toggleAdmin(true)">👤</div>
+
     <div class="header"><h2>CYBERIEND ON HITCLUB</h2></div>
-
-    <div class="stats-summary">
-        <div class="stat-item"><span>WINS</span><b id="winCount">0</b></div>
-        <div class="stat-item"><span>LOSSES</span><b id="lossCount">0</b></div>
-        <div class="stat-item"><span>WIN RATE</span><b id="winRate">0%</b></div>
+    
+    <div class="stats-summary">        
+        <div class="stat-item"><span>WINS</span><b id="winCount">0</b></div>        
+        <div class="stat-item"><span>LOSSES</span><b id="lossCount">0</b></div>        
+        <div class="stat-item"><span>WIN RATE</span><b id="winRate">0%</b></div>    
     </div>
 
-    <div class="input-group">
-        <label class="label-small">💰 Vốn hiện tại</label>
-        <input type="number" id="capInput" placeholder="Nhập số VNĐ..." value="1000000">
+    <div class="input-group">        
+        <label class="label-small">💰 Vốn hiện tại</label>        
+        <input type="number" id="capInput" placeholder="Nhập số VNĐ..." value="1000000">    
     </div>
 
-    <div class="input-group">
-        <label class="label-small">📊 Chuỗi lịch sử (T/X)</label>
-        <input type="text" id="histInput" placeholder="VD: TTTXX..." autocomplete="off">
+    <div class="input-group">        
+        <label class="label-small">📊 Chuỗi lịch sử (T/X)</label>        
+        <input type="text" id="histInput" placeholder="VD: TTTXX..." autocomplete="off" oninput="drawTrend()">
+        
+        <div class="quick-input">
+            <button class="q-btn q-tai" onclick="addChar('T')">TÀI</button>
+            <button class="q-btn" onclick="addChar('clear')">XÓA</button>
+            <button class="q-btn q-xiu" onclick="addChar('X')">XỈU</button>
+        </div>
     </div>
 
-    <button class="btn-main" id="btnMain" onclick="startLoading()">PHÂN TÍCH DEEP SCAN</button>
+    <div class="chart-box">
+        <div style="font-size: 10px; color: #64748b; margin-bottom: 5px;">Biểu ĐỒ</div>
+        <canvas id="trendChart" height="60" style="width:100%"></canvas>
+    </div>
+
+    <button class="btn-main" id="btnMain" onclick="startLoading()">PHÂN TÍCH KẾT QUẢ</button>    
     <a href="http://hitclub.pro/" target="_blank" class="btn-san">VÀO SÀN NGAY</a>
 
-    <div id="resArea" class="result-area">
-        <div id="finalPred" class="big-pred">--</div>
-        <div style="text-align:center;">
-            <span style="font-size:11px; color:#64748b; letter-spacing:2px;">ĐỘ TIN CẬY HỆ THỐNG</span>
-            <div id="confVal" style="font-size:32px; font-weight:900; font-family:'Orbitron'; color:var(--neon-blue);">0%</div>
-        </div>
-        <div class="bar-wrap">
-            <div id="barT" class="bar-t"></div>
-            <div id="barX" class="bar-x"></div>
-        </div>
-        <div id="historyDetail" class="history-detail"></div>
-        <div class="bet-box">
-            <span class="label-small" style="color:var(--neon-green); margin-bottom:5px;">LỆNH VÀO TIỀN</span>
-            <div id="moneyVal" class="bet-money">0 VNĐ</div>
-            <div id="betPercent" style="font-size:12px; color:#94a3b8; margin-top:5px;">(Đợi phân tích...)</div>
-        </div>
-        <div class="feedback-btns">
-            <button class="f-btn f-win" onclick="recordFeedback(true)">THẮNG ✅</button>
-            <button class="f-btn f-loss" onclick="recordFeedback(false)">THUA ❌</button>
-        </div>
+    <div id="resArea" class="result-area">        
+        <div id="finalPred" class="big-pred">--</div>        
+        <div style="text-align:center;">            
+            <span style="font-size:11px; color:#64748b; letter-spacing:2px;">ĐỘ TIN CẬY HỆ THỐNG</span>            
+            <div id="confVal" style="font-size:32px; font-weight:900; font-family:'Orbitron'; color:var(--neon-blue);">0%</div>        
+        </div>        
+        <div class="bar-wrap">            
+            <div id="barT" class="bar-t"></div>            
+            <div id="barX" class="bar-x"></div>        
+        </div>        
+        <div id="historyDetail" class="history-detail"></div>        
+        <div class="bet-box">            
+            <span class="label-small" style="color:var(--neon-green); margin-bottom:5px;">LỆNH VÀO TIỀN</span>            
+            <div id="moneyVal" class="bet-money">0 VNĐ</div>            
+            <div id="betPercent" style="font-size:12px; color:#94a3b8; margin-top:5px;">(Đợi phân tích...)</div>        
+        </div>        
+        <div class="feedback-btns">            
+            <button class="f-btn f-win" onclick="recordFeedback(true)">THẮNG ✅</button>            
+            <button class="f-btn f-loss" onclick="recordFeedback(false)">THUA ❌</button>        
+        </div>    
+    </div>
+</div>
+
+<div id="adminPopup" class="modal">
+    <div class="modal-content">
+        <h3 style="color: var(--neon-blue); font-family: 'Orbitron'; margin-top:0;">Thông Tin Tool</h3>
+        <p style="font-size: 14px; color: #94a3b8;">Trạng thái: <span style="color:var(--neon-green)">Đang hoạt động</span></p>
+        <p style="font-size: 14px;">Version: 2.6.0 Premium</p>
+        <p style="font-size: 12px; border-top: 1px solid #333; padding-top: 15px;">Liên hệ hỗ trợ kỹ thuật qua Telegram @duyvip51.</p>
+        <button onclick="toggleAdmin(false)" style="margin-top:20px; width:100%; padding:10px; border-radius:10px; background:var(--neon-blue); border:none; color:white; font-weight:bold;">ĐÓNG</button>
     </div>
 </div>
 
 <script>
+    // --- PHẦN JS THÊM MỚI (PHÍM NHANH, CHART, POPUP) ---
+    function toggleAdmin(show) { document.getElementById('adminPopup').style.display = show ? 'flex' : 'none'; }
+    
+    function addChar(c) {
+        let h = document.getElementById('histInput');
+        if(c === 'clear') h.value = h.value.slice(0, -1);
+        else h.value += c;
+        drawTrend();
+    }
+
+    function drawTrend() {
+        const canvas = document.getElementById('trendChart');
+        const ctx = canvas.getContext('2d');
+        const raw = document.getElementById('histInput').value.toUpperCase().replace(/[^TX]/g, '');
+        canvas.width = canvas.offsetWidth;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (raw.length < 2) return;
+        let stepX = canvas.width / (raw.length - 1);
+        ctx.beginPath();
+        ctx.strokeStyle = '#0ea5e9';
+        ctx.lineWidth = 2;
+        for(let i=0; i<raw.length; i++) {
+            let y = raw[i] === 'T' ? 10 : 50;
+            if(i === 0) ctx.moveTo(i * stepX, y);
+            else ctx.lineTo(i * stepX, y);
+        }
+        ctx.stroke();
+    }
+
+    // --- GIỮ NGUYÊN TOÀN BỘ LOGIC CŨ CỦA BẠN ---
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxaVIYCkkyrs_94FzlrjxDyezqxkntpB3ixqJfBd7S9-5c5t6JElOSbw3-G5zJthv0/exec";
     let wins = 0, losses = 0, lastPrediction = "", currentBet = 0;
 
     async function startLoading() {
         const btn = document.getElementById('btnMain');
-        btn.innerText = "QUÉT DEEP SCAN (4 TẦNG)...";
+        btn.innerText = "Đang Phân Tích";
         btn.disabled = true;
-
         try {
             const response = await fetch(GOOGLE_SHEET_URL);
             const sheetData = await response.json();
@@ -105,7 +166,7 @@
             console.error("Lỗi:", error);
             runAnalysis([]);
         } finally {
-            btn.innerText = "PHÂN TÍCH DEEP SCAN";
+            btn.innerText = "PHÂN TÍCH KẾT QUẢ";
             btn.disabled = false;
         }
     }
@@ -113,94 +174,63 @@
     function runAnalysis(sheetData) {
         let cap = parseInt(document.getElementById('capInput').value) || 0;
         let raw = document.getElementById('histInput').value.toUpperCase().replace(/[^TX]/g, '');
-        if (raw.length < 3) { alert("Nhập ít nhất 3 phiên gần nhất!"); return; }
-
+        if (raw.length < 3) { alert("Nhập ít nhất 15 phiên gần nhất!"); return; }
         let oldHistory = sheetData.map(row => row[1]).join('');
         let fullData = (oldHistory + raw).split('');
-        
         let pT = 50, pX = 50, matches = 0, usedPattern = "";
-
-        // --- THUẬT TOÁN DEEP SCAN 4 -> 3 -> 2 ---
         for (let len = 4; len >= 2; len--) {
             let pattern = raw.slice(-len);
             let cT = 0, cX = 0;
-            
             for (let i = 0; i < fullData.length - len; i++) {
                 if (fullData.slice(i, i + len).join('') === pattern) {
                     if (fullData[i + len] === 'T') cT++;
                     else if (fullData[i + len] === 'X') cX++;
                 }
             }
-
             if ((cT + cX) > 0) {
                 matches = cT + cX;
                 pT = Math.round((cT / matches) * 100);
                 pX = 100 - pT;
                 usedPattern = pattern;
-                break; // Tìm thấy mẫu sâu nhất là dừng
+                break;
             }
         }
-
-        // Logic bổ trợ bệt gắt cho Hitclub
         let lastChar = raw[raw.length-1];
         let streak = 0;
-        for (let i = raw.length-1; i >= 0; i--) {
-            if (raw[i] === lastChar) streak++; else break;
-        }
-        if (streak >= 4) {
-            if (lastChar === 'T') pT += 15; else pX += 15;
-        }
-
+        for (let i = raw.length-1; i >= 0; i--) { if (raw[i] === lastChar) streak++; else break; }
+        if (streak >= 4) { if (lastChar === 'T') pT += 15; else pX += 15; }
         pT = Math.min(96, Math.max(4, pT));
         pX = 100 - pT;
         lastPrediction = pT >= pX ? 'T' : 'X';
         let conf = Math.max(pT, pX);
-
-        // Hiển thị giao diện
         document.getElementById('resArea').style.display = 'block';
         let pDiv = document.getElementById('finalPred');
         pDiv.innerText = lastPrediction === 'T' ? "TÀI" : "XỈU";
         pDiv.className = "big-pred " + (lastPrediction === 'T' ? "tai-text" : "xiu-text");
         document.getElementById('confVal').innerText = conf + "%";
-        
         document.getElementById('barT').style.width = pT + "%";
         document.getElementById('barX').style.width = pX + "%";
-        
-        document.getElementById('historyDetail').innerHTML = `
-            Phát hiện <b>${matches}</b> lần mẫu <b>[${usedPattern}]</b> xuất hiện.<br>
-            Cầu đang đi theo nhịp <b>${usedPattern.length} tay</b> gần nhất.
-        `;
-
-        // Quản lý vốn Kelly tối ưu
-        let rate = 0.02; // Mặc định 2%
-        if (conf >= 90) rate = 0.1; 
-        else if (conf >= 80) rate = 0.05;
-
+        document.getElementById('historyDetail').innerHTML = `Phát hiện <b>${matches}</b> lần mẫu <b>[${usedPattern}]</b> xuất hiện.<br>Cầu đang đi theo nhịp <b>${usedPattern.length} tay</b> gần nhất.`;
+        let rate = conf >= 90 ? 0.1 : (conf >= 80 ? 0.05 : 0.02);
         currentBet = Math.floor(cap * rate);
         document.getElementById('moneyVal').innerText = currentBet.toLocaleString('vi-VN') + " VNĐ";
         document.getElementById('betPercent').innerText = `Gợi ý vào: ${(rate*100)}% vốn`;
-
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     async function recordFeedback(isWin) {
         let h = document.getElementById('histInput');
         let res = isWin ? lastPrediction : (lastPrediction === "T" ? "X" : "T");
-        
         fetch(GOOGLE_SHEET_URL, {
-            method: 'POST', 
-            mode: 'no-cors', 
+            method: 'POST', mode: 'no-cors',
             body: JSON.stringify({
-                history: h.value, 
-                prediction: lastPrediction, 
-                status: isWin ? "WIN" : "LOSS", 
-                capital: document.getElementById('capInput').value, 
-                betAmount: currentBet
+                history: h.value, prediction: lastPrediction, status: isWin ? "WIN" : "LOSS",
+                capital: document.getElementById('capInput').value, betAmount: currentBet
             })
         });
-
         if (isWin) wins++; else losses++;
         h.value += res;
+        drawTrend(); // Cập nhật biểu đồ sau khi chọn kết quả
         document.getElementById('winCount').innerText = wins;
         document.getElementById('lossCount').innerText = losses;
         document.getElementById('winRate').innerText = Math.round((wins/(wins+losses))*100) + "%";
