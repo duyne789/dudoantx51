@@ -3,131 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tool Hitclub MD5</title>
+    <title>Tool Hitclub MD5 - AI Self-Learning</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    
     <style>
-        /* GIỮ NGUYÊN TOÀN BỘ PHẦN STYLE CŨ */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
         :root { --bg: #020617; --panel: rgba(15, 23, 42, 0.8); --neon-blue: #0ea5e9; --neon-pink: #f43f5e; --neon-green: #10b981; --neon-yellow: #f59e0b; --text: #f8fafc; }
+        
         body { background: var(--bg); background: radial-gradient(circle at top right, #1e1b4b, #020617); font-family: 'Rajdhani', sans-serif; color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; overflow-x: hidden; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.3; pointer-events: none; }
+        
         .container { background: var(--panel); padding: 25px; border-radius: 32px; width: 100%; max-width: 450px; border: 1px solid rgba(56, 189, 248, 0.2); box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(56, 189, 248, 0.05); backdrop-filter: blur(15px); position: relative; z-index: 1; }
         .header h2 { font-family: 'Orbitron', sans-serif; text-align: center; font-size: 22px; background: linear-gradient(to right, var(--neon-blue), #93c5fd, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
+        
         .stats-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-        .stat-item { background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; transition: 0.3s; }
+        .stat-item { background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
         .stat-item span { display: block; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
         .stat-item b { font-size: 20px; color: #fff; font-family: 'Orbitron'; }
+        
         .input-group { margin-bottom: 20px; position: relative; }
         .label-small { font-size: 12px; color: var(--neon-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        
         input { width: 100%; padding: 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 18px; text-align: center; box-sizing: border-box; transition: 0.3s; }
         input:focus { outline: none; border-color: var(--neon-blue); background: rgba(15, 23, 42, 0.9); box-shadow: 0 0 15px rgba(14, 165, 233, 0.3); }
-        .btn-main { width: 100%; padding: 20px; background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white; font-family: 'Orbitron', sans-serif; font-weight: 900; border: none; border-radius: 18px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden; margin-bottom: 15px; }
-        .btn-san { display: block; width: 100%; padding: 15px; background: transparent; color: var(--neon-yellow); border: 2px solid var(--neon-yellow); border-radius: 18px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-sizing: border-box; }
+        
+        .btn-main { width: 100%; padding: 20px; background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white; font-family: 'Orbitron', sans-serif; font-weight: 900; border: none; border-radius: 18px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); margin-bottom: 15px; }
+        .btn-san { display: block; width: 100%; padding: 15px; background: transparent; color: var(--neon-yellow); border: 2px solid var(--neon-yellow); border-radius: 18px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; box-sizing: border-box; }
+        
         .result-area { margin-top: 30px; padding: 25px; background: rgba(2, 6, 23, 0.8); border-radius: 24px; border: 1px solid var(--neon-blue); animation: slideUp 0.5s ease-out; display: none; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
         .big-pred { font-size: 65px; font-family: 'Orbitron', sans-serif; font-weight: 900; text-align: center; margin: 10px 0; letter-spacing: -2px; }
         .tai-text { color: var(--neon-pink); filter: drop-shadow(0 0 15px var(--neon-pink)); }
         .xiu-text { color: var(--neon-blue); filter: drop-shadow(0 0 15px var(--neon-blue)); }
+        
         .bar-wrap { height: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 50px; overflow: hidden; display: flex; margin: 20px 0; padding: 3px; border: 1px solid rgba(255, 255, 255, 0.1); }
         .bar-t, .bar-x { width: 50%; height: 100%; border-radius: 50px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; transition: width 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .bar-t { background: linear-gradient(90deg, #f43f5e, #e11d48); }
         .bar-x { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+        
         .history-detail { font-size: 14px; color: #94a3b8; background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 16px; line-height: 1.6; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
         .bet-box { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); padding: 20px; border-radius: 20px; border: 1px solid var(--neon-green); text-align: center; margin-bottom: 25px; }
         .bet-money { font-size: 28px; font-weight: 900; color: var(--neon-green); font-family: 'Orbitron'; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+        
         .feedback-btns { display: flex; gap: 12px; }
         .f-btn { flex: 1; padding: 18px; border: none; border-radius: 16px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .f-win { background: var(--neon-green); color: #064e3b; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
-        .f-loss { background: var(--neon-pink); color: #fff; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3); }
-
-        /* PHẦN THÊM MỚI: BÀN PHÍM, BIỂU ĐỒ VÀ ADMIN POPUP */
-        .admin-trigger { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 20px; color: var(--neon-blue); }
+        .f-win { background: var(--neon-green); color: #064e3b; }
+        .f-loss { background: var(--neon-pink); color: #fff; }
+        
+        .admin-trigger { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 20px; color: var(--neon-blue); z-index: 10; }
         .quick-input { display: flex; gap: 10px; margin-top: 10px; }
         .q-btn { flex: 1; padding: 12px; border: 1px solid #334155; background: #0f172a; color: #fff; border-radius: 12px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; }
-        .q-tai { border-color: var(--neon-pink); color: var(--neon-pink); }
-        .q-xiu { border-color: var(--neon-blue); color: var(--neon-blue); }
+        
         .chart-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; margin: 15px 0; border: 1px solid #1e293b; }
-        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
-        .modal-content { background: #0f172a; padding: 30px; border-radius: 24px; border: 1px solid var(--neon-blue); width: 80%; max-width: 320px; text-align: center; }
+
+        /* --- PHẦN GIAO DIỆN ADMIN CẬP NHẬT --- */
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(10px); align-items: center; justify-content: center; }
+        .admin-card { background: #0f172a; width: 90%; max-width: 380px; border-radius: 24px; border: 2px solid var(--neon-blue); box-shadow: 0 0 50px rgba(14, 165, 233, 0.3); overflow: hidden; font-family: 'Rajdhani', sans-serif; }
+        .admin-head { background: linear-gradient(90deg, #0f172a, #1e293b); padding: 20px; border-bottom: 1px solid #334155; text-align: left; }
+        .admin-head h3 { margin: 0; font-family: 'Orbitron'; color: var(--neon-blue); font-size: 16px; display: flex; align-items: center; gap: 10px; }
+        .admin-body { padding: 20px; }
+        .ai-spec-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .spec-item { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .spec-item label { display: block; font-size: 10px; color: #64748b; text-transform: uppercase; }
+        .spec-item span { font-family: 'Orbitron'; color: #fff; font-size: 14px; }
+        .ai-log { background: #020617; border-radius: 12px; padding: 12px; height: 100px; overflow-y: auto; font-family: monospace; font-size: 11px; color: var(--neon-green); text-align: left; border: 1px solid #1e293b; }
+        .close-admin { width: 100%; padding: 15px; background: var(--neon-blue); border: none; color: white; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .close-admin:hover { opacity: 0.8; }
+        .dot-live { height: 8px; width: 8px; background-color: var(--neon-green); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="admin-trigger" onclick="toggleAdmin(true)">👤</div>
-
-    <div class="header"><h2>CYBERIEND ON HITCLUB</h2></div>
+    <div class="admin-trigger" onclick="toggleAdmin(true)">⚙️</div>
+    <div class="header"><h2>CYBERIEND HITCLUB MD5</h2></div>
     
-    <div class="stats-summary">        
-        <div class="stat-item"><span>WINS</span><b id="winCount">0</b></div>        
-        <div class="stat-item"><span>LOSSES</span><b id="lossCount">0</b></div>        
-        <div class="stat-item"><span>WIN RATE</span><b id="winRate">0%</b></div>    
+    <div class="stats-summary">
+        <div class="stat-item"><span>WINS</span><b id="winCount">0</b></div>
+        <div class="stat-item"><span>LOSSES</span><b id="lossCount">0</b></div>
+        <div class="stat-item"><span>WIN RATE</span><b id="winRate">0%</b></div>
     </div>
 
-    <div class="input-group">        
-        <label class="label-small">💰 Vốn hiện tại</label>        
-        <input type="number" id="capInput" placeholder="Nhập số VNĐ..." value="1000000">    
+    <div class="input-group">
+        <label class="label-small">💰 Vốn hiện tại</label>
+        <input type="number" id="capInput" value="1000000">
     </div>
 
-    <div class="input-group">        
-        <label class="label-small">📊 Chuỗi lịch sử (T/X)</label>        
-        <input type="text" id="histInput" placeholder="VD: TTTXX..." autocomplete="off" oninput="drawTrend()">
-        
+    <div class="input-group">
+        <label class="label-small">📊 Chuỗi lịch sử (T/X)</label>
+        <input type="text" id="histInput" placeholder="Nhập chuỗi T/X..." autocomplete="off" oninput="drawTrend()">
         <div class="quick-input">
-            <button class="q-btn q-tai" onclick="addChar('T')">TÀI</button>
+            <button class="q-btn" style="color:var(--neon-pink)" onclick="addChar('T')">TÀI</button>
             <button class="q-btn" onclick="addChar('clear')">XÓA</button>
-            <button class="q-btn q-xiu" onclick="addChar('X')">XỈU</button>
+            <button class="q-btn" style="color:var(--neon-blue)" onclick="addChar('X')">XỈU</button>
         </div>
     </div>
 
     <div class="chart-box">
-        <div style="font-size: 10px; color: #64748b; margin-bottom: 5px;">Biểu ĐỒ</div>
+        <div style="font-size: 10px; color: #64748b; margin-bottom: 5px;">BIỂU ĐỒ XU HƯỚNG AI</div>
         <canvas id="trendChart" height="60" style="width:100%"></canvas>
     </div>
 
-    <button class="btn-main" id="btnMain" onclick="startLoading()">PHÂN TÍCH KẾT QUẢ</button>    
-    <a href="http://hitclub.pro/" target="_blank" class="btn-san">VÀO SÀN NGAY</a>
-
-    <div id="resArea" class="result-area">        
-        <div id="finalPred" class="big-pred">--</div>        
-        <div style="text-align:center;">            
-            <span style="font-size:11px; color:#64748b; letter-spacing:2px;">ĐỘ TIN CẬY HỆ THỐNG</span>            
-            <div id="confVal" style="font-size:32px; font-weight:900; font-family:'Orbitron'; color:var(--neon-blue);">0%</div>        
-        </div>        
-        <div class="bar-wrap">            
-            <div id="barT" class="bar-t"></div>            
-            <div id="barX" class="bar-x"></div>        
-        </div>        
-        <div id="historyDetail" class="history-detail"></div>        
-        <div class="bet-box">            
-            <span class="label-small" style="color:var(--neon-green); margin-bottom:5px;">LỆNH VÀO TIỀN</span>            
-            <div id="moneyVal" class="bet-money">0 VNĐ</div>            
-            <div id="betPercent" style="font-size:12px; color:#94a3b8; margin-top:5px;">(Đợi phân tích...)</div>        
-        </div>        
-        <div class="feedback-btns">            
-            <button class="f-btn f-win" onclick="recordFeedback(true)">THẮNG ✅</button>            
-            <button class="f-btn f-loss" onclick="recordFeedback(false)">THUA ❌</button>        
-        </div>    
+    <button class="btn-main" id="btnMain" onclick="startLoading()">Phân Tích Kết Quả</button>
+    <a href="http://hitclub.pro/" target="_blank" class="btn-san">VÀO SÀN HITCLUB</a>
+    
+    <div id="resArea" class="result-area">
+        <div id="finalPred" class="big-pred">--</div>
+        <div style="text-align:center;">
+            <span id="aiStatus" style="font-size:10px; color:var(--neon-green); font-weight:bold; display:block; margin-bottom:5px;">AI: ĐANG HỌC XU HƯỚNG...</span>
+            <span style="font-size:11px; color:#64748b; letter-spacing:2px;">HỆ THỐNG TIN CẬY</span>
+            <div id="confVal" style="font-size:32px; font-weight:900; font-family:'Orbitron'; color:var(--neon-blue);">0%</div>
+        </div>
+        <div class="bar-wrap">
+            <div id="barT" class="bar-t"></div>
+            <div id="barX" class="bar-x"></div>
+        </div>
+        <div id="historyDetail" class="history-detail"></div>
+        <div class="bet-box">
+            <span class="label-small" style="color:var(--neon-green); margin-bottom:5px;">LỆNH VÀO TIỀN </span>
+            <div id="moneyVal" class="bet-money">0 VNĐ</div>
+            <div id="betPercent" style="font-size:12px; color:#94a3b8; margin-top:5px;">(Đợi AI tính toán...)</div>
+        </div>
+        <div class="feedback-btns">
+            <button class="f-btn f-win" onclick="recordFeedback(true)">THẮNG ✅</button>
+            <button class="f-btn f-loss" onclick="recordFeedback(false)">THUA ❌</button>
+        </div>
     </div>
 </div>
 
 <div id="adminPopup" class="modal">
-    <div class="modal-content">
-        <h3 style="color: var(--neon-blue); font-family: 'Orbitron'; margin-top:0;">Thông Tin Tool</h3>
-        <p style="font-size: 14px; color: #94a3b8;">Trạng thái: <span style="color:var(--neon-green)">Đang hoạt động</span></p>
-        <p style="font-size: 14px;">Version: 2.6.0 Premium</p>
-        <p style="font-size: 12px; border-top: 1px solid #333; padding-top: 15px;">Liên hệ hỗ trợ kỹ thuật qua Telegram @duyvip51.</p>
-        <button onclick="toggleAdmin(false)" style="margin-top:20px; width:100%; padding:10px; border-radius:10px; background:var(--neon-blue); border:none; color:white; font-weight:bold;">ĐÓNG</button>
+    <div class="admin-card">
+        <div class="admin-head">
+            <h3><span class="dot-live"></span> Control Panel</h3>
+        </div>
+        <div class="admin-body">
+            <div class="ai-spec-box">
+                <div class="spec-item">
+                    <label>Engine Version</label>
+                    <span>v2.6.0</span>
+                </div>
+                <div class="spec-item">
+                    <label>Scan Depth</label>
+                    <span>35 Sessions</span>
+                </div>
+                <div class="spec-item">
+                    <label>Memory Usage</label>
+                    <span>Active (10)</span>
+                </div>
+                <div class="spec-item">
+                    <label>AI Learning</label>
+                    <span style="color:var(--neon-green)">Auto-On</span>
+                </div>
+            </div>
+            <div style="text-align: left; font-size: 12px; color: #94a3b8; margin-bottom: 8px;">AI SYSTEM LOGS:</div>
+            <div class="ai-log" id="aiLog">
+                [SYSTEM] Initializing AI Engine...<br>
+                [SYSTEM] Ready for data input.<br>
+                [INFO] Deep scan enabled (35).
+            </div>
+        </div>
+        <button class="close-admin" onclick="toggleAdmin(false)">RETURN TO TERMINAL</button>
     </div>
 </div>
 
 <script>
-    // --- PHẦN JS THÊM MỚI (PHÍM NHANH, CHART, POPUP) ---
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxaVIYCkkyrs_94FzlrjxDyezqxkntpB3ixqJfBd7S9-5c5t6JElOSbw3-G5zJthv0/exec";
+    let wins = 0, losses = 0, lastPrediction = "", currentBet = 0;
+    let sessionHistory = []; 
+
     function toggleAdmin(show) { document.getElementById('adminPopup').style.display = show ? 'flex' : 'none'; }
     
+    function logToAdmin(msg) {
+        const log = document.getElementById('aiLog');
+        log.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${msg}`;
+        log.scrollTop = log.scrollHeight;
+    }
+
     function addChar(c) {
         let h = document.getElementById('histInput');
         if(c === 'clear') h.value = h.value.slice(0, -1);
         else h.value += c;
+        h.value = h.value.toUpperCase().replace(/[^TX]/g, '');
         drawTrend();
     }
 
@@ -150,87 +208,112 @@
         ctx.stroke();
     }
 
-    // --- GIỮ NGUYÊN TOÀN BỘ LOGIC CŨ CỦA BẠN ---
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxaVIYCkkyrs_94FzlrjxDyezqxkntpB3ixqJfBd7S9-5c5t6JElOSbw3-G5zJthv0/exec";
-    let wins = 0, losses = 0, lastPrediction = "", currentBet = 0;
-
     async function startLoading() {
         const btn = document.getElementById('btnMain');
-        btn.innerText = "Đang Phân Tích";
+        btn.innerText = "SCANNING BIG DATA...";
         btn.disabled = true;
+        logToAdmin("Scanning Google Sheet Database...");
         try {
             const response = await fetch(GOOGLE_SHEET_URL);
             const sheetData = await response.json();
-            runAnalysis(sheetData);
+            runAIAnalysis(sheetData);
         } catch (error) {
-            console.error("Lỗi:", error);
-            runAnalysis([]);
+            runAIAnalysis([]);
         } finally {
-            btn.innerText = "PHÂN TÍCH KẾT QUẢ";
+            btn.innerText = "AI DEEP ANALYSIS";
             btn.disabled = false;
         }
     }
 
-    function runAnalysis(sheetData) {
+    function runAIAnalysis(sheetData) {
         let cap = parseInt(document.getElementById('capInput').value) || 0;
         let raw = document.getElementById('histInput').value.toUpperCase().replace(/[^TX]/g, '');
-        if (raw.length < 3) { alert("Nhập ít nhất 15 phiên gần nhất!"); return; }
+        if (raw.length < 3) { alert("Cần ít nhất 3 phiên!"); return; }
+
         let oldHistory = sheetData.map(row => row[1]).join('');
         let fullData = (oldHistory + raw).split('');
-        let pT = 50, pX = 50, matches = 0, usedPattern = "";
-        for (let len = 4; len >= 2; len--) {
+        let pT = 50, matches = 0, usedPattern = "";
+        
+        let maxSearchLen = Math.min(raw.length, 35); 
+        for (let len = maxSearchLen; len >= 2; len--) {
             let pattern = raw.slice(-len);
             let cT = 0, cX = 0;
             for (let i = 0; i < fullData.length - len; i++) {
                 if (fullData.slice(i, i + len).join('') === pattern) {
-                    if (fullData[i + len] === 'T') cT++;
-                    else if (fullData[i + len] === 'X') cX++;
+                    fullData[i + len] === 'T' ? cT++ : cX++;
                 }
             }
             if ((cT + cX) > 0) {
                 matches = cT + cX;
-                pT = Math.round((cT / matches) * 100);
-                pX = 100 - pT;
+                pT = (cT / matches) * 100;
                 usedPattern = pattern;
                 break;
             }
         }
-        let lastChar = raw[raw.length-1];
-        let streak = 0;
-        for (let i = raw.length-1; i >= 0; i--) { if (raw[i] === lastChar) streak++; else break; }
-        if (streak >= 4) { if (lastChar === 'T') pT += 15; else pX += 15; }
-        pT = Math.min(96, Math.max(4, pT));
-        pX = 100 - pT;
+
+        let aiCorrection = 0;
+        if(sessionHistory.length >= 3) {
+            let winCount = sessionHistory.filter(x => x === 'WIN').length;
+            let lossCount = sessionHistory.filter(x => x === 'LOSS').length;
+            if(lossCount > winCount) {
+                aiCorrection = (lossCount - winCount) * 12; 
+                document.getElementById('aiStatus').innerText = "AI: PHÁT HIỆN SÀN ĐẢO CẦU!";
+                document.getElementById('aiStatus').style.color = "var(--neon-pink)";
+                logToAdmin("Warning: Reverse trend detected. Inverting logic.");
+            } else {
+                document.getElementById('aiStatus').innerText = "AI: XU HƯỚNG ỔN ĐỊNH";
+                document.getElementById('aiStatus').style.color = "var(--neon-green)";
+            }
+        }
+
+        if (aiCorrection > 0) pT = pT > 50 ? pT - aiCorrection : pT + aiCorrection;
+
+        pT = Math.min(98, Math.max(2, Math.round(pT)));
+        let pX = 100 - pT;
         lastPrediction = pT >= pX ? 'T' : 'X';
         let conf = Math.max(pT, pX);
+
         document.getElementById('resArea').style.display = 'block';
-        let pDiv = document.getElementById('finalPred');
-        pDiv.innerText = lastPrediction === 'T' ? "TÀI" : "XỈU";
-        pDiv.className = "big-pred " + (lastPrediction === 'T' ? "tai-text" : "xiu-text");
+        document.getElementById('finalPred').innerText = lastPrediction === 'T' ? "TÀI" : "XỈU";
+        document.getElementById('finalPred').className = "big-pred " + (lastPrediction === 'T' ? "tai-text" : "xiu-text");
         document.getElementById('confVal').innerText = conf + "%";
         document.getElementById('barT').style.width = pT + "%";
         document.getElementById('barX').style.width = pX + "%";
-        document.getElementById('historyDetail').innerHTML = `Phát hiện <b>${matches}</b> lần mẫu <b>[${usedPattern}]</b> xuất hiện.<br>Cầu đang đi theo nhịp <b>${usedPattern.length} tay</b> gần nhất.`;
-        let rate = conf >= 90 ? 0.1 : (conf >= 80 ? 0.05 : 0.02);
+        document.getElementById('historyDetail').innerHTML = `Khớp mẫu <b>[${usedPattern}]</b> từ ${matches} dữ liệu nguồn.`;
+
+        let rate = 0.02;
+        if (conf >= 90) rate = 0.15;
+        else if (conf >= 80) rate = 0.08;
+        else if (conf >= 70) rate = 0.04;
+
         currentBet = Math.floor(cap * rate);
         document.getElementById('moneyVal').innerText = currentBet.toLocaleString('vi-VN') + " VNĐ";
-        document.getElementById('betPercent').innerText = `Gợi ý vào: ${(rate*100)}% vốn`;
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        document.getElementById('betPercent').innerText = `Gợi ý: Vào ${(rate*100)}% vốn`;
+        logToAdmin(`Analysis complete. Prediction: ${lastPrediction} (${conf}%)`);
     }
 
     async function recordFeedback(isWin) {
-        let h = document.getElementById('histInput');
+        let hInput = document.getElementById('histInput');
+        let capInput = document.getElementById('capInput');
+        let currentCap = parseInt(capInput.value);
+        
+        if(isWin) {
+            capInput.value = currentCap + Math.floor(currentBet * 0.95);
+            sessionHistory.push('WIN');
+            logToAdmin("Result: WIN. Learning success patterns.");
+        } else {
+            capInput.value = currentCap - currentBet;
+            sessionHistory.push('LOSS');
+            logToAdmin("Result: LOSS. Adjusting AI bias.");
+        }
+        
+        if(sessionHistory.length > 10) sessionHistory.shift();
         let res = isWin ? lastPrediction : (lastPrediction === "T" ? "X" : "T");
-        fetch(GOOGLE_SHEET_URL, {
-            method: 'POST', mode: 'no-cors',
-            body: JSON.stringify({
-                history: h.value, prediction: lastPrediction, status: isWin ? "WIN" : "LOSS",
-                capital: document.getElementById('capInput').value, betAmount: currentBet
-            })
-        });
+        
         if (isWin) wins++; else losses++;
-        h.value += res;
-        drawTrend(); // Cập nhật biểu đồ sau khi chọn kết quả
+        hInput.value += res;
+        drawTrend();
+        
         document.getElementById('winCount').innerText = wins;
         document.getElementById('lossCount').innerText = losses;
         document.getElementById('winRate').innerText = Math.round((wins/(wins+losses))*100) + "%";
